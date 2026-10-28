@@ -1,8 +1,11 @@
 # PayTrack registration
 
 The registration page stores submissions in the Firestore `registrations`
-collection. After a successful write, visitors are sent to `/download`, where
-they can download `public/paytrack.apk` using the **Download PayTrack APK** link.
+collection. After a successful write, visitors are sent to the download page
+using a query parameter so the route works on static hosts such as GitHub Pages.
+They can download `public/paytrack.apk` using the **Download PayTrack APK** link.
+Asset URLs are relative so the site also works when deployed under a repository
+path on GitHub Pages.
 
 ## Configure Firebase
 

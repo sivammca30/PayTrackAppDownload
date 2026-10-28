@@ -4,6 +4,11 @@ import { getFirestoreDatabase } from './firebase'
 import './App.css'
 
 function DownloadPage() {
+  const apkUrl = new URL(
+    `${import.meta.env.BASE_URL}paytrack.apk`,
+    window.location.href,
+  ).toString()
+
   return (
     <main className="page-shell">
       <section className="download-card" aria-labelledby="download-title">
@@ -13,14 +18,14 @@ function DownloadPage() {
         <p className="intro">
           Thanks for registering. Your PayTrack app is ready to download.
         </p>
-        <a className="primary-button download-button" href="/paytrack.apk" download>
+        <a className="primary-button download-button" href={apkUrl} download>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3" />
           </svg>
           Download PayTrack APK
         </a>
         <p className="download-note">Android app · APK file</p>
-        <a className="text-link" href="/">Back to registration</a>
+        <a className="text-link" href={import.meta.env.BASE_URL}>Back to registration</a>
       </section>
     </main>
   )
@@ -48,7 +53,12 @@ function RegistrationPage() {
         mobileNumber,
         registeredAt: serverTimestamp(),
       })
-      window.location.assign('/download')
+      const downloadPageUrl = new URL(
+        import.meta.env.BASE_URL,
+        window.location.href,
+      )
+      downloadPageUrl.searchParams.set('page', 'download')
+      window.location.assign(downloadPageUrl.toString())
     } catch (error) {
       console.error('Registration failed:', error)
       setErrorMessage(
@@ -149,7 +159,9 @@ function RegistrationPage() {
 }
 
 function App() {
-  const isDownloadPage = window.location.pathname.replace(/\/+$/, '') === '/download'
+  const isDownloadPage =
+    new URLSearchParams(window.location.search).get('page') === 'download' ||
+    window.location.pathname.replace(/\/+$/, '') === '/download'
   return isDownloadPage ? <DownloadPage /> : <RegistrationPage />
 }
 
