@@ -1,7 +1,8 @@
 # PayTrack registration
 
 The registration page stores submissions in the Firestore `registrations`
-collection. After a successful write, visitors are sent to the download page
+collection. Returning users can log in with the same email and mobile number.
+After registration or a successful login, visitors are sent to the download page
 using a query parameter so the route works on static hosts such as GitHub Pages.
 They can download `public/paytrack.apk` using the **Download PayTrack APK** link.
 The GitHub Pages build uses the repository path as its base URL, so assets and
@@ -25,7 +26,10 @@ VITE_FIREBASE_APP_ID=your-app-id
 Restart the Vite server after changing `.env`. These Firebase web-app values
 are public client configuration; configure Firestore security rules and enable
 Firebase App Check before production use. Firestore rules must allow validated
-registration document creation in the `registrations` collection.
+registration document creation and the email/mobile lookup used by login. Since
+registration documents contain personal information, do not allow unrestricted
+public reads; use a trusted server-side lookup if the client query cannot be
+authorized safely.
 
 ## Run locally
 
